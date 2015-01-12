@@ -25,7 +25,7 @@ public class ChainCalculator {
 	 * Note! Only ones of the result are added.
 	 * 
 	 * @param s 	String value representing the numeric value that will be appended with chain addition 
-	 * @param n		Number of numbers to be added in the end of String s
+	 * @param n		Count of numbers to be added at the end of String s i.e. length of return value is s.length() + n
 	 * @return		String value s representing the numeric value of chain addition result
 	 */
 	public String add ( String s, int n ) {
@@ -39,6 +39,7 @@ public class ChainCalculator {
 			l1 = Character.getNumericValue(s.charAt(i));
 			l2 = Character.getNumericValue(s.charAt(i+1));
 			
+			// Add only ones
 			if(l1 + l2 > 9){
 				v = l1 + l2 - 10;
 			} else{
