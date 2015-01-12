@@ -8,6 +8,10 @@ package jyffe.viccipher;
  * 
  * Used to generate various keys necessary for VIC-cipher encoding and decoding
  */
+/**
+ * @author Jyffe
+ *
+ */
 public class KeyGenerator {
 
 	private Sequencer Sequencer = new Sequencer();
@@ -79,5 +83,54 @@ public class KeyGenerator {
 		G = Mod10.add(G, S1);
 		
 		return G;
+	}
+	
+	/**
+	 * Generate key T from key G and key S2
+	 * 
+	 * TODO: Error handling
+	 * 
+	 * @param G		String representation of key G
+	 * @param S2	String representation of key S2
+	 * @return		String representation of T
+	 */
+	public String generateKeyT(String G, String S2){
+		char[] T = G.toCharArray();
+		
+		for(int i = 0; i < T.length; i++){
+			switch(T[i]){
+			case '1':
+				T[i] = S2.charAt(0);
+				break;
+			case '2':
+				T[i] = S2.charAt(1);
+				break;
+			case '3':
+				T[i] = S2.charAt(2);
+				break;
+			case '4':
+				T[i] = S2.charAt(3);
+				break;
+			case '5':
+				T[i] = S2.charAt(4);
+				break;
+			case '6':
+				T[i] = S2.charAt(5);
+				break;
+			case '7':
+				T[i] = S2.charAt(6);
+				break;
+			case '8':
+				T[i] = S2.charAt(7);
+				break;
+			case '9':
+				T[i] = S2.charAt(8);
+				break;
+			case '0':
+				T[i] = S2.charAt(9);
+				break;
+			}
+		}
+		return String.valueOf(T);
 	}
 }

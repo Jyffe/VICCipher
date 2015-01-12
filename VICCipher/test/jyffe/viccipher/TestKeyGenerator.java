@@ -125,4 +125,16 @@ public class TestKeyGenerator {
 			}
 		}
 	}
+	
+	/**
+	 *  Tests for generateKeyT()...
+	 * 
+	 */
+
+	@Test
+	public void testGenerateKeyTOk() throws Exception {
+		KeyGenerator tester = new KeyGenerator();
+		
+		assertEquals("0221215831", tester.generateKeyT("6551517891", "1674205839"));
+	}
 }
