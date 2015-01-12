@@ -14,6 +14,39 @@ public class Sequencer {
 	 * @return
 	 * 
 	 */
+	public String sequenceString(String s){
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
+	
+		Integer i = 0, n = 1;
+		
+		s = s.replaceAll("[^A-Öa-ö0-9]", "");
+		s = s.toUpperCase();
+		
+		while(i < characters.length()){
+			while(s.contains(String.valueOf(characters.charAt(i)))){
+				if(s.length() <= 10){
+					if(n == 10){
+						n = 0;
+						
+						s = s.replaceFirst(String.valueOf(characters.charAt(i)), n.toString());
+					} 
+					else {
+							s = s.replaceFirst(String.valueOf(characters.charAt(i)), n.toString());
+					}
+				} 
+				else {
+					s = s.replaceFirst(String.valueOf(characters.charAt(i)), n.toString());
+				}
+				
+				n++;
+			}
+			
+			i++;
+		}
+	
+		return s;
+	}
+	
 	public String sequenceCharacters(String s){
 		
 		String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
