@@ -21,8 +21,13 @@ public class TestKeyGenerator {
 	public static void tearDownAfterClass() throws Exception {
 	}
 
+	/**
+	 *  Tests for generateKeyS()...
+	 * 
+	 */
+
 	@Test
-	public void testOk() throws Exception {
+	public void testGenerateKeySOk() throws Exception {
 		KeyGenerator tester = new KeyGenerator();
 		
 		assertEquals("6203189574", tester.generateKeyS("IDREAMOFJE"));
@@ -31,7 +36,7 @@ public class TestKeyGenerator {
 	}
 	
 	@Test
-	public void testExceptionStringTooLong() throws Exception {
+	public void testGenerateKeySExceptionStringTooLong() throws Exception {
 		KeyGenerator tester = new KeyGenerator();
 		
 		try{
@@ -44,7 +49,7 @@ public class TestKeyGenerator {
 	}
 	
 	@Test
-	public void testExceptionStringTooShort() throws Exception {
+	public void testGenerateKeySExceptionStringTooShort() throws Exception {
 		KeyGenerator tester = new KeyGenerator();
 		
 		try{
@@ -55,5 +60,69 @@ public class TestKeyGenerator {
 			}
 		}
 	}
+	
+	/** 
+	 * Tests for generateKeyG()...
+	 * 
+	 */
 
+	@Test
+	public void testGenerateGOk() throws Exception {
+		KeyGenerator tester = new KeyGenerator();
+		
+		assertEquals("6551517891", tester.generateKeyG("7.4.1776", "77651", "6203189574"));
+		
+	}
+	
+	@Test
+	public void testGenerateKeyGExceptionRITooLong() throws Exception {
+		KeyGenerator tester = new KeyGenerator();
+		
+		try{
+			tester.generateKeyG("7.4.1776", "776519", "6203189574");
+		} catch (Exception e){
+			if(e.getMessage().compareTo("Sequencer.generateKeyG() : RI.length() > 5") != 0){
+				fail("expected <Sequencer.generateKeyG() : RI.length() > 5>"+" but was <:"+e.getMessage()+">");
+			}
+		}
+	}
+	
+	@Test
+	public void testGenerateKeyGExceptionRITooShort() throws Exception {
+		KeyGenerator tester = new KeyGenerator();
+		
+		try{
+			tester.generateKeyG("7.4.1776", "7765", "6203189574");
+		} catch (Exception e){
+			if(e.getMessage().compareTo("Sequencer.generateKeyG() : RI.length() < 5") != 0){
+				fail("expected <Sequencer.generateKeyG() : RI.length() < 5>"+" but was <:"+e.getMessage()+">");
+			}
+		}
+	}
+	
+	@Test
+	public void testGenerateKeyGExceptionS1TooLong() throws Exception {
+		KeyGenerator tester = new KeyGenerator();
+		
+		try{
+			tester.generateKeyG("7.4.1776", "77651", "62031895741");
+		} catch (Exception e){
+			if(e.getMessage().compareTo("Sequencer.generateKeyG() : S1.length() > 10") != 0){
+				fail("expected <Sequencer.generateKeyG() : S1.length() > 10>"+" but was <:"+e.getMessage()+">");
+			}
+		}
+	}
+	
+	@Test
+	public void testGenerateKeyGExceptionS1TooShort() throws Exception {
+		KeyGenerator tester = new KeyGenerator();
+		
+		try{
+			tester.generateKeyG("7.4.1776", "77651", "620318957");
+		} catch (Exception e){
+			if(e.getMessage().compareTo("Sequencer.generateKeyG() : S1.length() < 10") != 0){
+				fail("expected <Sequencer.generateKeyG() : S1.length() < 10>"+" but was <:"+e.getMessage()+">");
+			}
+		}
+	}
 }
