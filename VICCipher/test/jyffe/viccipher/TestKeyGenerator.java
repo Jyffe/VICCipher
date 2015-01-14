@@ -42,8 +42,8 @@ public class TestKeyGenerator {
 		try{
 			tester.generateKeyS("I dream of Jeanne in T-shirt");
 		} catch (Exception e){
-			if(e.getMessage().compareTo("Sequencer.generateKeyS() : s.length() > 10") != 0){
-				fail("expected <Sequencer.generateKeyS() : s.length() > 10>"+" but was <:"+e.getMessage()+">");
+			if(e.getMessage().compareTo("KeyGenerator.generateKeyS() : s.length() > 10") != 0){
+				fail("expected <KeyGenerator.generateKeyS() : s.length() > 10>"+" but was <:"+e.getMessage()+">");
 			}
 		}
 	}
@@ -55,8 +55,8 @@ public class TestKeyGenerator {
 		try{
 			tester.generateKeyS("I dream");
 		} catch (Exception e){
-			if(e.getMessage().compareTo("Sequencer.generateKeyS() : s.length() < 10") != 0){
-				fail("expected <Sequencer.generateKeyS() : s.length() < 10>"+" but was <:"+e.getMessage()+">");
+			if(e.getMessage().compareTo("KeyGenerator.generateKeyS() : s.length() < 10") != 0){
+				fail("expected <KeyGenerator.generateKeyS() : s.length() < 10>"+" but was <:"+e.getMessage()+">");
 			}
 		}
 	}

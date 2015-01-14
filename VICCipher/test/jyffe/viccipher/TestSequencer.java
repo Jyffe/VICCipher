@@ -22,7 +22,7 @@ public class TestSequencer {
 	}
 
 	@Test
-	public void test() {
+	public void testSequenceOk() {
 		Sequencer tester = new Sequencer();
 		
 		assertEquals("6203189574", tester.sequence("IDREAMOFJE"));
