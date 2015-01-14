@@ -16,6 +16,7 @@ public class BlockChipher {
 	 * Generate U-block from key T by chain adding 50 iterations to key T and regrouping the resulting String of 50 characters 
 	 * (the key T itself from beginning of the String is omitted) into 5 rows of 10 characters each.
 	 * 
+	 * TODO: Random placing of the start point indicator '^'
 	 * TODO: Error handling
 	 * 
 	 * @param T		String representation of key T
@@ -43,6 +44,7 @@ public class BlockChipher {
 	 * 
 	 * TODO: What should be done if there are NO white spaces in the keyphrase and its length is the same as C?
 	 * TODO: How numbers should be implemented in the checkerboard?
+	 * TODO: Support for numbers?
 	 * 
 	 * @param C				String representation of key C
 	 * @param keyphrase		Keyphrase as a String
@@ -53,6 +55,8 @@ public class BlockChipher {
 		int rows = C.length() - keyphrase.replaceAll("[^A-Öa-ö0-9]", "").length() + 2;
 		int cols = C.length() + 1;
 
+		keyphrase = keyphrase.toUpperCase();
+		
 		// [rows][columns]
 		char[][] CB = new char[rows][cols];
 		
@@ -97,7 +101,7 @@ public class BlockChipher {
 		}
 
 		/*
-		 * Find out which charactes are used in the keyphrase and remove them from character set for the checker board
+		 * Find out which characters are used in the keyphrase and remove them from character set for the checker board
 		 */
 		for(int i = 0; i < keyphrase.length(); i++){
 			if(characters.contains(String.valueOf(keyphrase.charAt(i)))){
@@ -121,5 +125,56 @@ public class BlockChipher {
 		}
 		
 		return CB;
+	}
+	
+	/**
+	 * TODO: Support for numbers?
+	 * TODO: Fill end of the message with random numbers instead of zero
+	 * 
+	 * @param msg
+	 * @param checkerboard
+	 * @return
+	 */
+	public String encode(String msg, char[][] checkerboard, String K1){
+		
+		// Am I doing this right now?
+		msg = msg.replaceAll("\\s", "");
+		
+		for(int col = 1; col < checkerboard[0].length; col++){
+			if(msg.contains(String.valueOf(checkerboard[1][col]))){
+				msg = msg.replace(checkerboard[1][col], checkerboard[0][col]);
+			}
+		}
+		
+		String regexp = null;
+		for(int row = 2; row < checkerboard.length; row++){
+			for(int col = 1; col < checkerboard[0].length; col++){
+				if(msg.contains(String.valueOf(checkerboard[row][col]))){
+					if(checkerboard[row][col] == '^'){
+						regexp = "\\^";
+					} else if(checkerboard[row][col] == '.'){
+						regexp = "\\.";
+					} else if(checkerboard[row][col] == '?'){
+						regexp = "\\?";
+					} else if(checkerboard[row][col] == '!'){
+						regexp = "\\!";
+					}
+					else {
+						regexp = String.valueOf(checkerboard[row][col]);
+					}
+					msg = msg.replaceAll(regexp, String.valueOf(checkerboard[row][0] + String.valueOf(checkerboard[0][col])));
+				}
+			}
+		}
+
+		for(int i = 0; i < msg.length()%5; i++){
+			// Should be random numbers...
+			msg += '0';
+		}
+		
+		// First transposition...
+		
+		
+		return msg;
 	}
 }

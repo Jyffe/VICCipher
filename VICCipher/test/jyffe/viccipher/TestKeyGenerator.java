@@ -10,6 +10,10 @@ import org.junit.Test;
 
 /**
  * @author Jyffe
+ * 
+ * Very basic and basically testOk type of a test suite for refactoring purposes.
+ * 
+ * TODO: A lot of error cases probably is escaping in between fingers atm...
  *
  */
 public class TestKeyGenerator {
@@ -136,5 +140,88 @@ public class TestKeyGenerator {
 		KeyGenerator tester = new KeyGenerator();
 		
 		assertEquals("0221215831", tester.generateKeyT("6551517891", "1674205839"));
+		assertEquals("1674205839", tester.generateKeyT("1234567890", "1674205839"));
+	}
+	
+	@Test
+	public void testGenerateKeyTNok() throws Exception {
+		KeyGenerator tester = new KeyGenerator();
+		
+		assertEquals("-1", tester.generateKeyT("abcdefghij", "1674205839"));
+	}
+	
+	/**
+	 *  Tests for generateFirstTransposition()...
+	 * 
+	 */
+	
+	@Test
+	public void testGenerateFirstTranspositionOk(){
+		KeyGenerator tester = new KeyGenerator();
+		
+		String[] UB = new String[] {
+				"2433363143",
+				"6766994579",
+				"3325839262",
+				"6573121888",
+				"1204339669"
+		};
+		
+		assertEquals(14, tester.generateFirstTranspositionLength(UB, 8));
+	}
+	
+	@Test
+	public void testGenerateFirstTranspositionNok(){
+		KeyGenerator tester = new KeyGenerator();
+		
+		String[] UB = new String[] {
+				"0000000000",
+				"0000000000",
+				"0000000000",
+				"0000000000",
+				"0000000000"
+		};
+		
+		assertEquals(-1, tester.generateFirstTranspositionLength(UB, 8));
+	}
+
+	/**
+	 *  Tests for generateSecondTransposition()...
+	 * 
+	 */
+	@Test
+	public void testGenerateSecondTranspositionOk(){
+		KeyGenerator tester = new KeyGenerator();
+		
+		String[] UB = new String[] {
+				"2433363143",
+				"6766994579",
+				"3325839262",
+				"6573121888",
+				"1204339669"
+		};
+		
+		assertEquals(17, tester.generateSecondTranspositionLength(UB, 8));
+	}
+	
+	/**
+	 *  Tests for generateKeyK()...
+	 * 
+	 */
+	@Test
+	public void testGenerateKeyKOk(){
+		KeyGenerator tester = new KeyGenerator();
+		
+		String[] UB = new String[] {
+				"5200197365",
+				"7201060912",
+				"9211669031",
+				"1327259342",
+				"4599742766"
+		};
+		
+		// This all is restructuring sake for now - need to revise once restructuring is over AND the functionality is corrected 
+		assertEquals("7099200129", tester.generateKeyK(UB, "5028290760", 7, 0));
+		assertEquals("1062757914", tester.generateKeyK(UB, "5028290760", 7, 1));
 	}
 }

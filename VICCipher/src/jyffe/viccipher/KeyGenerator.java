@@ -18,7 +18,6 @@ public class KeyGenerator {
 	private ChainCalculator CC = new ChainCalculator();
 	private Mod10Calculator Mod10 = new Mod10Calculator();
 	
-	
 	/**
 	 * Generates key S by sequencing String s
 	 * <br>
@@ -54,10 +53,12 @@ public class KeyGenerator {
 	 * 
 	 * <pre>
 	 * TODO:	Check whether date string is valid
+	 * TODO:	Works only with time format of dd.mm.yyy, implement something nicer
+	 * TODO:	Removal of date separators assumes that separator is always a '.'
 	 * </pre>
 	 * 
 	 * @param date			String representation of a date as a seed for generating key G. Date must be in format dd.mm.yyyy.
-	 * @param RI			Random Indicator String. Ri.length() must be 5.
+	 * @param RI			Random Indicator String. RI.length() must be 5.
 	 * @param S1			String representation of the key S1. S1.length() must be 10.
 	 * @return				String representation of key G.
 	 * @throws Exception	Thrown if any of the given seed parameters are not valid. Exception message contains reason for the exception.
@@ -67,18 +68,24 @@ public class KeyGenerator {
 		String G = null;
 		
 		if(RI.length() < 5){
+			
 			throw new Exception("Sequencer.generateKeyG() : RI.length() < 5");
+			
 		}else if (RI.length() > 5){
+			
 			throw new Exception("Sequencer.generateKeyG() : RI.length() > 5");
 		}
 		
 		if(S1.length() < 10){
+			
 			throw new Exception("Sequencer.generateKeyG() : S1.length() < 10");
+			
 		}else if (S1.length() > 10){
+			
 			throw new Exception("Sequencer.generateKeyG() : S1.length() > 10");
 		}
 		
-		// Remove separators from the date String
+		// Remove separators from the date String, assumes that '.' is always used...
 		date = date.replaceAll("\\.+", "");
 
 		// Use and RI five first numbers of the date String for mod10 subtraction to get first iteration of the key G
@@ -94,9 +101,15 @@ public class KeyGenerator {
 	}
 	
 	/**
-	 * Generate key T from key G and key S2
-	 * 
-	 * TODO: Error handling
+	 * Generate key T from key G and key S2 by replacing numbers of the key G based on the following scheme:
+	 * <pre>
+	 * S2                1674205839   Search '6' of G from row above, replace that with number of S2 in the same column i.e. '0' and place it 
+	 * Numbers 1 - 0     1234567890   as first number of the T. Search '5' of G from tow above, replace that with number of S2 in the same column
+	 * G                 6551517891   i.e. '2' and place it as second number of the T. And so forth...
+	 * ----------------------------
+	 * T                 0221215831           
+	 * </pre>
+	 * TODO: Error handling via exceptions
 	 * 
 	 * @param G		String representation of key G
 	 * @param S2	String representation of key S2
@@ -137,36 +150,55 @@ public class KeyGenerator {
 			case '0':
 				T[i] = S2.charAt(9);
 				break;
+			default:
+				return "-1";
 			}
 		}
+		
 		return String.valueOf(T);
 	}
 	
-
 	/**
-	 * @param UB
-	 * @param ID
-	 * @return
+	 * Generates length for the first transposition. Length equals to first number backwards unequal to the last number plus the agent ID.
+	 * 
+	 * <pre>
+	 * TODO: Is it really not possible that all the U-block has the same value?
+	 * </pre>
+	 * 
+	 * @param UB	U-block as array of String[5]
+	 * @param ID	Agent identification as a String
+	 * @return		Length of the first transposition as an integer
 	 */
-	public int generateFirstTransposition(String [] UB, int ID){
+	public int generateFirstTranspositionLength(String [] UB, int ID){
 		int row = UB.length - 1;
 		int col = UB[0].length() - 1;
 		
+		// If all the array had the same value something is (?) terribly wrong...
+		Integer result = -1;
+		
 		for(int i = 1; i < col; i++){
 			if( Integer.parseInt(String.valueOf(UB[row].charAt(col - i))) != Integer.parseInt(String.valueOf(UB[row].charAt(col)))){
-				return Integer.parseInt(String.valueOf(UB[row].charAt(col - i))) + ID;
+				
+				result = Integer.parseInt(String.valueOf(UB[row].charAt(col - i))) + ID;
+				
+				break;
+			} else{
+				
+				result = -1;
 			}
 		}
 
-		return 0;
+		return result;
 	}
 	
 	/**
-	 * @param UB
-	 * @param ID
-	 * @return
+	 * Generates length for the first transposition by adding the agend ID to the last number of the U-block.
+	 * 
+	 * @param UB 	U-block as array of String[5]
+	 * @param ID	Agent identification as a String
+	 * @return		Length of the first transposition as an integer
 	 */
-	public int generateSecondTransposition(String [] UB, int ID){
+	public int generateSecondTranspositionLength(String [] UB, int ID){
 		int row = UB.length - 1;
 		int col = UB[0].length() - 1;
 						
@@ -174,7 +206,9 @@ public class KeyGenerator {
 	}
 	
 	/**
-	 * @param UB1
+	 * RESTRUCTURE THIS!
+	 * 
+	 * @param UB
 	 * @param T
 	 * @return
 	 */
@@ -211,6 +245,15 @@ public class KeyGenerator {
 			}
 		}
 		
+		/*
+		 * Ota sitten ensimmäisen transposition leveyden verran numeroita uudelleenjärjestetyn U-blokin alusta ja 
+		 * sekventialisoi ne (jos transposition leveys on yli 10, tarvitset sekventialisoinnissa yli kymmenen meneviä 
+		 * numeroita, jos leveys on tasan 10, käytä kymmenen sijasta nollaa). Tämä on K1. Ota sitten U-blokista toisen 
+		 * transposition leveyden verran numeroita (äsken otettujen numeroiden perästä, älä käytä samoja numeroita uudestaan)
+		 * ja sekventialisoi ne avaimeksi K2.
+		 */
+		
+		// ERROR ERROR ERROR
 		return seed.substring(transposition * 10, transposition * 10 + 10);
 	}
 

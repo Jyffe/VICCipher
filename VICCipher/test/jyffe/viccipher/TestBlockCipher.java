@@ -41,58 +41,6 @@ public class TestBlockCipher {
 		
 	}
 	
-	/*
-	@Test
-	public void testGenerateUBlock2Ok() {
-		BlockChipher tester = new BlockChipher();
-
-		String[] UB1 = new String[5];
-		UB1[0] = "2433363143";
-		UB1[1] = "6766994579";
-		UB1[2] = "3325839262";
-		UB1[3] = "6573121888";
-		UB1[4] = "1204339669";
-
-		String T = "0221215831";
-
-		String[] UB2 = tester.generateUBlock2(UB1, T);
-		
-		
-		//for (int i = 0; i < UB2.length; i++){
-		//	System.out.println(UB2[i]);
-		//}
-		
-	}*/
-	/*
-	@Test
-	public void testGenerateFirstTransposition(){
-		BlockChipher tester = new BlockChipher();
-		
-		String[] UB = new String[5];
-		UB[0] = "2433363143";
-		UB[1] = "6766994579";
-		UB[2] = "3325839262";
-		UB[3] = "6573121888";
-		UB[4] = "1204339669";
-		
-		assertEquals(14, tester.generateFirstTransposition(UB, 8));
-	}
-	*/
-	/*
-	@Test
-	public void testGenerateSecondTransposition(){
-		BlockChipher tester = new BlockChipher();
-		
-		String[] UB = new String[5];
-		UB[0] = "2433363143";
-		UB[1] = "6766994579";
-		UB[2] = "3325839262";
-		UB[3] = "6573121888";
-		UB[4] = "1204339669";
-		
-		assertEquals(17, tester.generateSecondTransposition(UB, 8));
-	}
-	*/
 	@Test
 	public void testGenerateCheckerBoardOk(){
 		BlockChipher tester = new BlockChipher();
