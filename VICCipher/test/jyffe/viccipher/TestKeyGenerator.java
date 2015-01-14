@@ -220,8 +220,26 @@ public class TestKeyGenerator {
 				"4599742766"
 		};
 		
-		// This all is restructuring sake for now - need to revise once restructuring is over AND the functionality is corrected 
-		assertEquals("7099200129", tester.generateKeyK(UB, "5028290760", 7, 0));
-		assertEquals("1062757914", tester.generateKeyK(UB, "5028290760", 7, 1));
+		assertEquals("7118931213141021465", tester.generateKeyK1(UB, "5028290760", 7));
+		assertEquals("10711121582369413", tester.generateKeyK2(UB, "5028290760", 7));
+	}
+	
+	/**
+	 *  Tests for generateKeyC()...
+	 * 
+	 */
+	@Test
+	public void testGenerateKeyCOk(){
+		KeyGenerator tester = new KeyGenerator();
+		
+		String[] UB = new String[] {
+				"5200197365",
+				"7201060912",
+				"9211669031",
+				"1327259342",
+				"4599742766"
+		};
+		
+		assertEquals("2490731856", tester.generateKeyC(UB));
 	}
 }

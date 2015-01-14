@@ -45,6 +45,7 @@ public class KeyGenerator {
 			
 			throw new Exception("KeyGenerator.generateKeyS() : s.length() > 10");
 		}
+		
 		return s;
 	}
 	
@@ -170,16 +171,16 @@ public class KeyGenerator {
 	 * @return		Length of the first transposition as an integer
 	 */
 	public int generateFirstTranspositionLength(String [] UB, int ID){
-		int row = UB.length - 1;
-		int col = UB[0].length() - 1;
+		int lastrow = UB.length - 1;
+		int lastcol = UB[0].length() - 1;
 		
 		// If all the array had the same value something is (?) terribly wrong...
 		Integer result = -1;
 		
-		for(int i = 1; i < col; i++){
-			if( Integer.parseInt(String.valueOf(UB[row].charAt(col - i))) != Integer.parseInt(String.valueOf(UB[row].charAt(col)))){
+		for(int i = 1; i < lastcol; i++){
+			if( Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol - i))) != Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol)))){
 				
-				result = Integer.parseInt(String.valueOf(UB[row].charAt(col - i))) + ID;
+				result = Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol - i))) + ID;
 				
 				break;
 			} else{
@@ -199,32 +200,24 @@ public class KeyGenerator {
 	 * @return		Length of the first transposition as an integer
 	 */
 	public int generateSecondTranspositionLength(String [] UB, int ID){
-		int row = UB.length - 1;
-		int col = UB[0].length() - 1;
+		int lastrow = UB.length - 1;
+		int lastcol = UB[0].length() - 1;
 						
-		return Integer.parseInt(String.valueOf(UB[row].charAt(col))) + ID;
+		return Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol))) + ID;
 	}
 	
 	/**
-	 * RESTRUCTURE THIS!
+	 * Calculates length of the first transposition based on the U-block, key T and agent ID
 	 * 
-	 * @param UB
-	 * @param T
-	 * @return
+	 * @param UB	U-block as a String[]
+	 * @param T		String representation of the key T
+	 * @param ID	Agent ID as an Integer
+	 * @return		Length of the first transposition
 	 */
-	public String generateKeyK(String[] UB, String T, int ID, int transposition){
+	public String generateKeyK1(String[] UB, String T, int ID){
 
-		int t1 = 0, t2 = 0; // The first and second transposition
-		int lastrow = UB.length - 1;
-		int lastcol = UB[0].length() - 1;
-		
-		t2 = Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol))) + ID;
-		
-		for(int i = 1; i < lastcol; i++){
-			if( Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol - i))) != t2){
-				t1 = Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol - i))) + ID;
-			}
-		}
+		int t1length = 0; // Length of the first transposition
+		t1length = generateFirstTranspositionLength(UB, ID);
 		
 		T = Sequencer.sequence(T);
 		
@@ -245,16 +238,53 @@ public class KeyGenerator {
 			}
 		}
 		
-		/*
-		 * Ota sitten ensimmäisen transposition leveyden verran numeroita uudelleenjärjestetyn U-blokin alusta ja 
-		 * sekventialisoi ne (jos transposition leveys on yli 10, tarvitset sekventialisoinnissa yli kymmenen meneviä 
-		 * numeroita, jos leveys on tasan 10, käytä kymmenen sijasta nollaa). Tämä on K1. Ota sitten U-blokista toisen 
-		 * transposition leveyden verran numeroita (äsken otettujen numeroiden perästä, älä käytä samoja numeroita uudestaan)
-		 * ja sekventialisoi ne avaimeksi K2.
-		 */
+		seed = seed.substring(0, t1length);
 		
-		// ERROR ERROR ERROR
-		return seed.substring(transposition * 10, transposition * 10 + 10);
+		seed = Sequencer.sequence(seed);
+		
+		return seed;
+	}
+
+	/**
+	 * Calculates length of the second transposition based on the U-block, key T and agent ID
+	 * 
+	 * @param UB	U-block as a String[]
+	 * @param T		String representation of the key T
+	 * @param ID	Agent ID as an Integer
+	 * @return		Length of the second transposition
+	 */
+	public String generateKeyK2(String[] UB, String T, int ID){
+
+		int t1length = 0, t2length = 0; // Length of the first and second transposition
+		
+		t2length = generateSecondTranspositionLength(UB, ID);
+		
+		t1length = generateFirstTranspositionLength(UB, ID);
+		
+		T = Sequencer.sequence(T);
+		
+		String seed = "";
+		
+		int col = 0;
+
+		// 0 = 10
+		for(int i = 0; i < T.length(); i++){
+			if(i == 0){
+				col = T.indexOf(String.valueOf(9));
+			}else{
+				col = T.indexOf(String.valueOf(i));
+			}
+						
+			for(int row = 0; row < UB.length; row++){
+				seed += UB[row].charAt(col);
+			}
+		}
+
+		seed = seed.substring(t1length, t1length + t2length);
+
+		seed = Sequencer.sequence(seed);
+		
+		return seed;
 	}
 
 	public String generateKeyC(String[] UB){
