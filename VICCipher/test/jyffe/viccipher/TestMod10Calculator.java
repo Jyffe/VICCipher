@@ -10,21 +10,18 @@ import org.junit.Test;
 
 /**
  * @author Jyffe
+ * 
+ * Tests for the Mod10Calculator -class
+ * Test data reference http://www.quadibloc.com/crypto/pp1324.htm
  *
  */
 public class TestMod10Calculator {
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
 	@Test
 	public void testSubtractOk() {
 		Mod10Calculator tester = new Mod10Calculator();
 		
+		// Ref http://www.quadibloc.com/crypto/pp1324.htm
+		assertEquals("03584", tester.subtract("77651", "74177"));
 		assertEquals("03584", tester.subtract("77651", "74177"));
 	}
 
@@ -32,6 +29,7 @@ public class TestMod10Calculator {
 	public void testAddOk() {
 		Mod10Calculator tester = new Mod10Calculator();
 		
+		// Ref http://www.quadibloc.com/crypto/pp1324.htm
 		assertEquals("6551517891", tester.add("6203189574", "0358438327"));
 	}
 }

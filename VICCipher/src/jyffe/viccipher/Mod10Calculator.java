@@ -10,7 +10,9 @@ package jyffe.viccipher;
 public class Mod10Calculator {
 	
 	/**
-	 * Perform mod10 subtraction
+	 * Perform mod10 subtraction. Both subtracted and subtractor must be of equal length of digits.
+	 * 
+	 * TODO: Add checks for lengths and for other than numeric values
 	 * 
 	 * @param subtracted	Number to be mod10 subtracted from
 	 * @param subtractor	Number to be mod10 subtracted
@@ -39,7 +41,9 @@ public class Mod10Calculator {
 	}
 	
 	/**
-	 * Perform mod10 addition
+	 * Perform mod10 addition. Both addends must be of equal length of digits.
+	 * 
+	 * TODO: Add checks for lengths and for other than numeric values
 	 * 
 	 * @param addend1	Number to be mod10 added
 	 * @param addend2	Number to be mod10 added

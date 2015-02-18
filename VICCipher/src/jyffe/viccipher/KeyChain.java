@@ -6,51 +6,77 @@ package jyffe.viccipher;
 /**
  * @author Jyffe
  * 
- * Used to generate various keys necessary for VIC-cipher encoding and decoding
+ * Used to generate and store various keys necessary for VIC-cipher encoding and decoding
  */
-/**
- * @author Jyffe
- *
- */
-public class KeyGenerator {
-
+public class KeyChain {
+	private String S1 = null;			// Key S1
+	private String S2 = null;			// Key S2
+	private String G = null;			// Key G
+	private String T = null;			// Key T
+	private int[] K1IntArray = null;	// Key K1 as array of integers	// Should have an object instead? 
+	private int[] K2IntArray = null;	// Key K2 as array of integers
+	private String K1 = null;			// Key K1
+	private String K2 = null;			// Key K2
+	
 	private Sequencer Sequencer = new Sequencer();
 	private ChainCalculator CC = new ChainCalculator();
-	private Mod10Calculator Mod10 = new Mod10Calculator();
+	private Mod10Calculator Mod10 = new Mod10Calculator(); 
 	
-	/**
-	 * Generates key S by sequencing String s
-	 * <br>
-	 * <br>
-	 * <b>Known issues</b>
-	 * <br>
-	 * 14.1.2015: Length check is not working properly as it checks length of the String including white spaces and special characters whereas 
-	 * number of alphanumeric characters is significant as the String is passed to Sequencer.sequence() method. As a workaround, Remove any 
-	 * white spaces and special characters from the String s before passing it for the method. 
-	 * 	 * 
-	 * @param s				String seed for generating the key S. Note that s.length() must be exactly 10.
-	 * @return				String representation of key S
-	 * @throws Exception	Thrown if s.length() != 10. Exception message contains reason for the exception.
-	 */
-	public String generateKeyS(String s) throws Exception {
+	public String getKeyS1(){
+		return this.S1;
+	}
+	
+	public String getKeyS2(){
+		return this.S2;
+	}
 
-		s = Sequencer.sequence(s);
-		
-		// Bug 14.1.2015: Only number of alphanumeric characters is meaningful, not length of the entire String
-		if(s.length() < 10){
-			
-			throw new Exception("KeyGenerator.generateKeyS() : s.length() < 10");
-			
-		} else if(s.length() > 10){
-			
-			throw new Exception("KeyGenerator.generateKeyS() : s.length() > 10");
-		}
-		
-		return s;
+	public String getKeyG(){
+		return this.G;
+	}
+	
+	public String getKeyT(){
+		return this.T;
+	}
+	
+	public String getKeyK1(){
+		return this.K1;
+	}
+	
+	public String getKeyK2(){
+		return this.K2;
+	}
+	
+	public int[] getKeyK1IntArray(){
+		return this.K1IntArray;
+	}
+	
+	public int[] getKeyK2IntArray(){
+		return this.K2IntArray;
 	}
 	
 	/**
-	 * Generates key G from date, RI and S1 by using mod10 subtraction, chain addition and mod10 addition.
+	 * Generates key pair S1 and S2 by sequencing String s (10 first characters for S1 and 10 subsequential characters for S2). 
+	 * Values of the key pair S can be retrieved by using getKeyS1() and getKeyS2() -methods.
+	 * 
+	 * @param s				String seed for generating the key S. Note that s.length() must be exactly 10.
+	 * @throws Exception	Thrown if s.length() != 10. Exception message contains reason for the exception.
+	 */
+	public void generateKeyPairS(String s) throws Exception {
+		s = s.replaceAll("[^A-Öa-ö0-9]", "");
+
+		if(s.length() < 20){
+			
+			throw new Exception("KeyGenerator.generateKeyS() : s.length() < 20");
+		}
+		
+		this.S1 = Sequencer.sequenceToString(s.substring(0, 10));
+		
+		this.S2 = Sequencer.sequenceToString(s.substring(10, 20));
+	}
+
+	/**
+	 * Generates key G from date, RI and S1 by using mod10 subtraction, chain addition and mod10 addition. Value of the key G can be
+	 * retrieved by using the getKeyG() -method.
 	 * 
 	 * <pre>
 	 * TODO:	Check whether date string is valid
@@ -61,12 +87,9 @@ public class KeyGenerator {
 	 * @param date			String representation of a date as a seed for generating key G. Date must be in format dd.mm.yyyy.
 	 * @param RI			Random Indicator String. RI.length() must be 5.
 	 * @param S1			String representation of the key S1. S1.length() must be 10.
-	 * @return				String representation of key G.
 	 * @throws Exception	Thrown if any of the given seed parameters are not valid. Exception message contains reason for the exception.
 	 */
-	public String generateKeyG(String date, String RI, String S1) throws Exception {
-		
-		String G = null;
+	public void generateKeyG(String date, String RI, String s1) throws Exception {
 		
 		if(RI.length() < 5){
 			
@@ -76,29 +99,18 @@ public class KeyGenerator {
 			
 			throw new Exception("Sequencer.generateKeyG() : RI.length() > 5");
 		}
-		
-		if(S1.length() < 10){
-			
-			throw new Exception("Sequencer.generateKeyG() : S1.length() < 10");
-			
-		}else if (S1.length() > 10){
-			
-			throw new Exception("Sequencer.generateKeyG() : S1.length() > 10");
-		}
-		
+
 		// Remove separators from the date String, assumes that '.' is always used...
 		date = date.replaceAll("\\.+", "");
 
 		// Use and RI five first numbers of the date String for mod10 subtraction to get first iteration of the key G
-		G = Mod10.subtract(RI, date.substring(0, 5));
+		this.G = Mod10.subtract(RI, date.substring(0, 5));
 		
 		// Chain add 5 iterations to get second iteration of the key G
-		G = CC.add(G, 5);
+		this.G = CC.add(this.G, 5);
 		
 		// Use second iteration of the key G and key S1 to get third and final iteration of the key G
-		G = Mod10.add(G, S1);
-		
-		return G;
+		this.G = Mod10.add(this.G, s1);
 	}
 	
 	/**
@@ -110,13 +122,13 @@ public class KeyGenerator {
 	 * ----------------------------
 	 * T                 0221215831           
 	 * </pre>
+	 * Value of the key T can be retrieved by using the getKeyT() -method.
 	 * TODO: Error handling via exceptions
 	 * 
 	 * @param G		String representation of key G
 	 * @param S2	String representation of key S2
-	 * @return		String representation of T
 	 */
-	public String generateKeyT(String G, String S2){
+	public void generateKeyT(String G, String S2){
 		char[] T = G.toCharArray();
 		
 		for(int i = 0; i < T.length; i++){
@@ -152,11 +164,12 @@ public class KeyGenerator {
 				T[i] = S2.charAt(9);
 				break;
 			default:
-				return "-1";
+				T[i] = '.';				// TODO: Should throw an exception
+				break;
 			}
 		}
 		
-		return String.valueOf(T);
+		this.T = String.valueOf(T);
 	}
 	
 	/**
@@ -193,7 +206,7 @@ public class KeyGenerator {
 	}
 	
 	/**
-	 * Generates length for the first transposition by adding the agend ID to the last number of the U-block.
+	 * Generates length for the first transposition by adding the agent ID to the last number of the U-block.
 	 * 
 	 * @param UB 	U-block as array of String[5]
 	 * @param ID	Agent identification as a String
@@ -206,89 +219,55 @@ public class KeyGenerator {
 		return Integer.parseInt(String.valueOf(UB[lastrow].charAt(lastcol))) + ID;
 	}
 	
-	/**
-	 * Calculates length of the first transposition based on the U-block, key T and agent ID
-	 * 
-	 * @param UB	U-block as a String[]
-	 * @param T		String representation of the key T
-	 * @param ID	Agent ID as an Integer
-	 * @return		Length of the first transposition
-	 */
-	public String generateKeyK1(String[] UB, String T, int ID){
+	public void generateKeyPairK(String[] UB, String T, int ID){
+		int t1length = generateFirstTranspositionLength(UB, ID);; // Length of the first transposition
+		int t2length = generateSecondTranspositionLength(UB, ID); // Length of the second transposition
 
-		int t1length = 0; // Length of the first transposition
-		t1length = generateFirstTranspositionLength(UB, ID);
+		/* Referenced example at http://www.quadibloc.com/crypto/pp1324.htm does not sequence the T. However, the results are the same
+		 * only the algorithm related to generating K1 would be a slightly difference. Now it is easier to implement as T contains any
+		 * certain number 1..n exactly once.
+		 * 
+		 */
 		
-		T = Sequencer.sequence(T);
+		T = Sequencer.sequenceToString(T);
+
+		String ub = "";
 		
-		String seed = "";
+		this.K1 = "";
+		this.K2 = "";
 		
+		this.K1IntArray = new int[t1length];
+		this.K2IntArray = new int[t2length];
+
 		int col = 0;
-
-		// 0 = 10
-		for(int i = 0; i < T.length(); i++){
-			if(i == 0){
-				col = T.indexOf(String.valueOf(9));
+		
+		for(int i = 1; i <= T.length(); i++){
+			if(i == 10){
+				col = T.indexOf(String.valueOf(0));
 			}else{
 				col = T.indexOf(String.valueOf(i));
 			}
-						
+			
 			for(int row = 0; row < UB.length; row++){
-				seed += UB[row].charAt(col);
+				ub += UB[row].charAt(col);
 			}
 		}
 		
-		seed = seed.substring(0, t1length);
+		this.K1 = ub.substring(0, t1length);
 		
-		seed = Sequencer.sequence(seed);
+		this.K1IntArray = Sequencer.sequenceToIntArray(this.K1);
+		this.K1 = Sequencer.sequenceToString(this.K1);
 		
-		return seed;
+		col = 0;
+
+		this.K2 = ub.substring(t1length, t1length + t2length);
+		
+		this.K2IntArray = Sequencer.sequenceToIntArray(this.K2);
+		this.K2 = Sequencer.sequenceToString(this.K2);
 	}
-
-	/**
-	 * Calculates length of the second transposition based on the U-block, key T and agent ID
-	 * 
-	 * @param UB	U-block as a String[]
-	 * @param T		String representation of the key T
-	 * @param ID	Agent ID as an Integer
-	 * @return		Length of the second transposition
-	 */
-	public String generateKeyK2(String[] UB, String T, int ID){
-
-		int t1length = 0, t2length = 0; // Length of the first and second transposition
-		
-		t2length = generateSecondTranspositionLength(UB, ID);
-		
-		t1length = generateFirstTranspositionLength(UB, ID);
-		
-		T = Sequencer.sequence(T);
-		
-		String seed = "";
-		
-		int col = 0;
-
-		// 0 = 10
-		for(int i = 0; i < T.length(); i++){
-			if(i == 0){
-				col = T.indexOf(String.valueOf(9));
-			}else{
-				col = T.indexOf(String.valueOf(i));
-			}
-						
-			for(int row = 0; row < UB.length; row++){
-				seed += UB[row].charAt(col);
-			}
-		}
-
-		seed = seed.substring(t1length, t1length + t2length);
-
-		seed = Sequencer.sequence(seed);
-		
-		return seed;
-	}
-
+	
 	public String generateKeyC(String[] UB){
 		
-		return Sequencer.sequence(UB[UB.length-1]);
+		return Sequencer.sequenceToString(UB[UB.length-1]);
 	}
 }

@@ -25,9 +25,8 @@ public class Sequencer {
 	 * 
 	 * @param s		String to be sequenced
 	 * @return		Sequenced String s
-	 * 
 	 */
-	public String sequence(String s){
+	public String sequenceToString(String s){
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖabcdefghij";
 		String numbers = "1234567890";
 		String letters = "abcdefghij";
@@ -37,8 +36,8 @@ public class Sequencer {
 		 */
 		Integer i = 0, n = 1; 
 		
-		/* #BUG
-		 * 12.1.2014 
+		/* TODO
+		 * BUG 12.1.2014 
 		 * Known issue: '^' breaks the code... for some reason the following regexp does not qualify for this character...
 		 */
 		s = s.replaceAll("[^A-Öa-ö0-9]", ""); // Remove any special characters and white spaces out of the String
@@ -77,5 +76,60 @@ public class Sequencer {
 		}
 
 		return s;
+	}
+	
+	public int[] sequenceToIntArray(String s){
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖabcdefghij";
+		String numbers = "1234567890";
+		String letters = "abcdefghij";
+	
+		/* n = 1 as sequencing the String starts with numeric value 1 i.e. 10th character gets the value 0 or 10 depending 
+		 * of length of the String
+		 */
+		Integer i = 0, n = 1; 
+		
+		/* TODO
+		 * BUG 12.1.2014 
+		 * Known issue: '^' breaks the code... for some reason the following regexp does not qualify for this character...
+		 */
+		s = s.replaceAll("[^A-Öa-ö0-9]", ""); // Remove any special characters and white spaces out of the String
+		s = s.toUpperCase(); // Convert the String to all upper case letters
+
+		/* In case the String contains numerals they are at first converted to low case letters a-j to avoid the following replacement
+		 * routine to break up.
+		 */
+		for(int j = 0; j < numbers.length(); j++){
+			s = s.replaceAll(String.valueOf(numbers.charAt(j)), String.valueOf(letters.charAt(j)));
+		}
+
+		int[] result = new int[s.length()];
+		
+		// The actual sequencing routine.
+		while(i < characters.length()){
+			while(s.contains(String.valueOf(characters.charAt(i)))){
+				// If length of sequenced String is 10, the 10th character gets value 0
+				if(s.length() <= 10){
+					if(n == 10){
+						n = 0;
+						
+						result[s.indexOf(String.valueOf(characters.charAt(i)))] = n;
+						s = s.replaceFirst(String.valueOf(characters.charAt(i)), " ");
+					} 
+					else {
+							result[s.indexOf(String.valueOf(characters.charAt(i)))] = n;
+							s = s.replaceFirst(String.valueOf(characters.charAt(i)), " ");
+					}
+				} 
+				// Else the 10th character gets value 10, 11th character gets value 11 and so on
+				else {
+					result[s.indexOf(String.valueOf(characters.charAt(i)))] = n;
+					s = s.replaceFirst(String.valueOf(characters.charAt(i)), " ");
+				}
+				n++;
+			}
+			i++;
+		}
+
+		return result;
 	}
 }
