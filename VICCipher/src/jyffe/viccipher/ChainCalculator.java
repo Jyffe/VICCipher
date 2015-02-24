@@ -6,7 +6,8 @@ package jyffe.viccipher;
 /**
  * @author Jyffe
  * 
- * ChainCalculator is used to perform chain calculation operations. 
+ * ChainCalculator -class is used to perform chain calculation operations.
+ *  
  */
 public class ChainCalculator {
 	
@@ -28,7 +29,7 @@ public class ChainCalculator {
 	 * @param n		Count of numbers to be added at the end of String s i.e. length of return value is s.length() + n
 	 * @return		String value representing the numeric value of chain addition result
 	 */
-	public String add ( String s, int n ) {
+	public String add ( String s, int n ){
 		
 		Integer i = 0, l1 = 0, l2 = 0, v = 0;
 		

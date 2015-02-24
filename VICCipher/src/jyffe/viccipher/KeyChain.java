@@ -230,7 +230,7 @@ public class KeyChain {
 		 */
 		
 		T = Sequencer.sequenceToString(T);
-
+		
 		String ub = "";
 		
 		this.K1 = "";
@@ -252,7 +252,7 @@ public class KeyChain {
 				ub += UB[row].charAt(col);
 			}
 		}
-		
+
 		this.K1 = ub.substring(0, t1length);
 		
 		this.K1IntArray = Sequencer.sequenceToIntArray(this.K1);
