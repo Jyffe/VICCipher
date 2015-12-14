@@ -40,12 +40,12 @@ public class TestKeyChain {
 		assertEquals("6203189574", tester.getKeyS1());
 		assertEquals("1672480935", tester.getKeyS2());
 		
-		tester.generateKeyPairS("Mä näitä polkuja tallaan kai viimeiseen asti Jos sä rakkaani seisot mun vierelläin");
+		tester.generateKeyPairS("MÃ¤ nÃ¤itÃ¤ polkuja tallaan kai viimeiseen asti Jos sÃ¤ rakkaani seisot mun vierellÃ¤in");
 		
-		// Mä näitä pol
-		// Mänäitäpol
-		// MÄNÄITÄPOL
-		// M  Ä  N  Ä  I  T  Ä  P  O  L
+		// MÃ¤ nÃ¤itÃ¤ pol
+		// MÃ¤nÃ¤itÃ¤pol
+		// MÃ„NÃ„ITÃ„POL
+		// M  Ã„  N  Ã„  I  T  Ã„  P  O  L
 		// 3  8  4  9  1  7  0  6  5  2
 		assertEquals("3849170652", tester.getKeyS1());
 		

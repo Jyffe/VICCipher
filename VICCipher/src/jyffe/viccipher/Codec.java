@@ -53,9 +53,9 @@ public class Codec {
 	 *                   v v v
 	 *     2 9 6 0 5 8 1 7 3 4     <- Key C, last three numbers (that have no corresponding letter in keyphrase) are used to number the rows
 	 *     A S T E L I N           <- keyphrase
-	 * > 7 B F J O R W Z Ö ' &     <- place B, C, D, F, G, H, J, K, M, O, P, Q, R, U, V, W, X, Y, Z, Å, Ä and Ö in the rows below from top to
-	 * > 3 C G K P U X Å ° # !        down, left to right (A, E, I, L, N and S are in keyphrase and not used)
-	 * > 4 D H M Q V Y Ä . ^ ?     <- Fill remaining cells with necessary special characters, here °, ., ', #, ^,&, ! and ? are used
+	 * > 7 B F J O R W Z Ã– ' &     <- place B, C, D, F, G, H, J, K, M, O, P, Q, R, U, V, W, X, Y, Z, Ã…, Ã„ and Ã– in the rows below from top to
+	 * > 3 C G K P U X Ã… Â° # !        down, left to right (A, E, I, L, N and S are in keyphrase and not used)
+	 * > 4 D H M Q V Y Ã„ . ^ ?     <- Fill remaining cells with necessary special characters, here Â°, ., ', #, ^,&, ! and ? are used
 	 * </pre> 
 	 * 
 	 * TODO: What to do if keyphrase contains characters not in the charset?
@@ -85,7 +85,8 @@ public class Codec {
 		
 		// Number of rows depend on number of spaces in the keyphrase
 	    int rows = C.length() - keyphrase.replace(" ", "").length() + 2; // No need to remove spaces, just count them
-		int cols = C.length() + 1;
+	    
+	    int cols = C.length() + 1;
 
 		// To all uppercase
 		keyphrase = keyphrase.toUpperCase();
@@ -93,7 +94,7 @@ public class Codec {
 		// [rows][columns]
 		char[][] CB = new char[rows][cols];
 		
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ°.'#^&!?";
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÃ…Ã„Ã–Â°.'#^&!?";
 		
 		// Initialize the CB with ' '
 		for (int row = 0; row < rows; row++){
@@ -121,10 +122,11 @@ public class Codec {
 		/*
 		 * Label rows with the remaining numbers in row 1 (key C) that have no letter in row 2 (keyphrase) in the same position (col) 
 		 */
+		
 		int pos = 1;
 		
 		for(int row = 2; row < rows; row++ ){
-			for(int col = pos; col < cols; col++){
+			for(int col = pos; col < cols; col++){ // The branch coverage is never satisfied with the current code as cols is never reached
 				if(CB[1][col] == ' '){
 					CB[row][0] = CB[0][col];
 					pos = col+1;
@@ -199,9 +201,9 @@ public class Codec {
 	 * 
 	 *     2 4 9 0 7 3 1 8 5 6
 	 *     A S T E L I N 
-	 *   8 B F J O R W Z Ö ' &
-	 *   5 C G K P U X Å ° # !
-	 *   6 D H M Q V Y Ä . ^ ?
+	 *   8 B F J O R W Z Ã– ' &
+	 *   5 C G K P U X Ã… Â° # !
+	 *   6 D H M Q V Y Ã„ . ^ ?
 	 *   
 	 * Message: "code is 1234 ^ The secret"
 	 *  -> codeis1234^Thesecret                 Remove spaces
@@ -302,9 +304,9 @@ public class Codec {
 	 * 
 	 *     2 4 9 0 7 3 1 8 5 6
 	 *     A S T E L I N 
-	 *   8 B F J O R W Z Ö ' &
-	 *   5 C G K P U X Å ° # !
-	 *   6 D H M Q V Y Ä . ^ ?
+	 *   8 B F J O R W Z Ã– ' &
+	 *   5 C G K P U X Ã… Â° # !
+	 *   6 D H M Q V Y Ã„ . ^ ?
 	 * 
 	 * -> 52 80 62 0 55 1 55 2 55 3 55 4 65 9 64 0 4 0 52 87 0 9
 	 * -> C  O  D  E #  1 #  2 #  3 #  4 ^  T H  E S E C  R  E T
@@ -397,10 +399,13 @@ public class Codec {
 	 * @param msg
 	 * @return
 	 */
+	
+	/*
 	public String unpatchMessage(String msg){
 		
 		return msg;
 	}
+	*/
 	
 	/**
 	 * Reordrers the message based on the key K1.

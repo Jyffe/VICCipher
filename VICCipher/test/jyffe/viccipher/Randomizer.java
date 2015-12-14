@@ -13,13 +13,13 @@ public class Randomizer {
 	      tmp.append(ch);
 	    for (char ch = 'A'; ch <= 'Z'; ++ch)
 	      tmp.append(ch);
-	    tmp.append('Å');
-	    tmp.append('Ä');
-	    tmp.append('Ö');
-	    tmp.append('°');
+	    tmp.append('Ã…');
+	    tmp.append('Ã„');
+	    tmp.append('Ã–');
+	    tmp.append('Â°');
 	    tmp.append('.');
 	    tmp.append('\'');
-	    //tmp.append('#'); Ei ole sallittu merkki, käytetään koodaamaan numeroita
+	    //tmp.append('#'); Ei ole sallittu merkki, kÃ¤ytetÃ¤Ã¤n koodaamaan numeroita
 	    tmp.append('^');
 	    tmp.append('&');
 	    tmp.append('!');

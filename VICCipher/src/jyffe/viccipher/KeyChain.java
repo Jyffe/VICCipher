@@ -62,7 +62,7 @@ public class KeyChain {
 	 * @throws Exception	Thrown if s.length() != 10. Exception message contains reason for the exception.
 	 */
 	public void generateKeyPairS(String s) throws Exception {
-		s = s.replaceAll("[^A-Öa-ö0-9]", "");
+		s = s.replaceAll("[^A-Ã–a-Ã¶0-9]", "");
 
 		if(s.length() < 20){
 			

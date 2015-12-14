@@ -40,7 +40,7 @@ public class TestSequencer {
 		assertEquals("6203189574", tester.sequenceToString("iDREamoFjE"));
 		assertEquals("6203189574", tester.sequenceToString("I DREAM OF JE"));
 		assertEquals("1674205839", tester.sequenceToString("A.N!N I=E*W<I>T-H#T"));
-		assertEquals("135246", tester.sequenceToString("≈ƒ÷≈ƒ÷"));
+		assertEquals("135246", tester.sequenceToString("√Ö√Ñ√ñ√Ö√Ñ√ñ"));
 		assertEquals("1234567890", tester.sequenceToString("abcdefghij"));
 		assertEquals("123456789101112", tester.sequenceToString("abcdefghijkl"));
 		assertEquals("162534", tester.sequenceToString("Avatar"));

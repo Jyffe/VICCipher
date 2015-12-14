@@ -27,7 +27,7 @@ public class Sequencer {
 	 * @return		Sequenced String s
 	 */
 	public String sequenceToString(String s){
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖabcdefghij";
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÃ…Ã„Ã–abcdefghij";
 		String numbers = "1234567890";
 		String letters = "abcdefghij";
 	
@@ -40,7 +40,7 @@ public class Sequencer {
 		 * BUG 12.1.2014 
 		 * Known issue: '^' breaks the code... for some reason the following regexp does not qualify for this character...
 		 */
-		s = s.replaceAll("[^A-Öa-ö0-9]", ""); // Remove any special characters and white spaces out of the String
+		s = s.replaceAll("[^A-Ã–a-Ã¶0-9]", ""); // Remove any special characters and white spaces out of the String
 		s = s.toUpperCase(); // Conver the String to all upper case letters
 
 		/* In case the String contains numerals they are at first converted to low case letters a-j to avoid the following replacement
@@ -79,7 +79,7 @@ public class Sequencer {
 	}
 	
 	public int[] sequenceToIntArray(String s){
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖabcdefghij";
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÃ…Ã„Ã–abcdefghij";
 		String numbers = "1234567890";
 		String letters = "abcdefghij";
 	
@@ -92,7 +92,7 @@ public class Sequencer {
 		 * BUG 12.1.2014 
 		 * Known issue: '^' breaks the code... for some reason the following regexp does not qualify for this character...
 		 */
-		s = s.replaceAll("[^A-Öa-ö0-9]", ""); // Remove any special characters and white spaces out of the String
+		s = s.replaceAll("[^A-Ã–a-Ã¶0-9]", ""); // Remove any special characters and white spaces out of the String
 		s = s.toUpperCase(); // Convert the String to all upper case letters
 
 		/* In case the String contains numerals they are at first converted to low case letters a-j to avoid the following replacement
